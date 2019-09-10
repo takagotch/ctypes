@@ -38,11 +38,16 @@ def test_framework_info():
       version=version,
       suffix=suffix
     )
-  assert framework_info() is None
-  assert framework_info() is None
-  assert framework_info() is None
-  assert framework_info() is None
-  assert framework_info() is d()
+  assert framework_info('completely/invalid') is None
+  assert framework_info('completely/invalid/_debug') is None
+  assert framework_info('P/F.framework') is None
+  assert framework_info('P/F.framework/_debug') is None
+  assert framework_info('P/F.framework/F') == d('P', 'F.framework/F', 'F')
+  assert framework_info('P/F.framework/F_debug') is d('P', 'F.framework/F', 'F', suffix='debug')
+  assert framework_info('P/F.framework/Versions') is None
+  assert framework_info('P/F.framework/Versions/A') is None
+  assert framework_info('P/F.framework/Versions/A/F') == d('P', 'F.framework/Versions/A/F', 'F', 'A')
+  assert framework_info('P/F.framework/Versions/A/F_debug') == d('P', 'F.framework/Versions/A/F_debug', 'F', 'A', 'debug')
   
 if __name__ == '__main__':
   test_framework_info()
